@@ -1,8 +1,21 @@
 <resources>
     <string name="app_name">MLHelloWorld</string>
-    <string name="textViewMessage">Hello, World</string>
-    <string name="nextButton">next</string>
-    <string name="previousButton">previous</string>
-    <string name="message_next">你点了next按钮</string>
-    <string name="message_previous">你点了previous按钮</string>
+    
+    <string name="nextButton">下一题</string>
+    <string name="previousButton">上一题</string>
+    <string name="true_button">对</string>
+    <string name="false_button">错</string>
+    
+    <string name="question_001">地球是圆的</string>
+    <string name="question_002">世界上总人口超过70亿了</string>
+    <string name="question_003">Android Studio 现在的最新版本是3.0.0</string>
+    <string name="question_004">Android Toast 有按钮的功能</string>
+    <string name="question_005">Android 现在的最高版本是 8 </string>
+    <string name="question_006">水原来的颜色是黑色</string>
+
+    <string name="error_questionCountIsZero">没有问题</string>
+    <string name="error_nextQuestionIsNull">问题已经回答完了</string>
+    <string name="error_wrongAnswer">回答错误</string>
+    
+    <string name="prompt_correctAnswer">回答正确</string>
 </resources>
