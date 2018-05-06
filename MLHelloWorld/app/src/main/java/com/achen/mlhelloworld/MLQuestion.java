@@ -7,6 +7,8 @@ package com.achen.mlhelloworld;
 public class MLQuestion {
     private int mQuestionId;
     private Boolean mQuestionResult;
+    /// 用户回答的是否正确
+    public MLQuestionAnswerStatus mUserDidAnswerStatus = MLQuestionAnswerStatus.NO_ANSWER;
 
     static MLQuestion[] createQuestionList() {
 
@@ -33,5 +35,33 @@ public class MLQuestion {
 
     public Boolean getQuestionResult() {
         return mQuestionResult;
+    }
+
+    public Integer questionStatusToIntValue() {
+        switch (mUserDidAnswerStatus) {
+            case NO_ANSWER:
+                return 1;
+            case ANSWER_IS_FALSE:
+                return 2;
+            case ANSWER_IS_TRUE:
+                return 3;
+            case LOCK_UP_ANSWER:
+                return 4;
+            default:
+                return 1;
+        }
+    }
+
+    public MLQuestionAnswerStatus questionIntValueToStatus(Integer value) {
+        switch (value) {
+            case 4:
+                return MLQuestionAnswerStatus.LOCK_UP_ANSWER;
+            case 3:
+                return MLQuestionAnswerStatus.ANSWER_IS_TRUE;
+            case 2:
+                return MLQuestionAnswerStatus.ANSWER_IS_FALSE;
+            default:
+                return MLQuestionAnswerStatus.NO_ANSWER;
+        }
     }
 }
