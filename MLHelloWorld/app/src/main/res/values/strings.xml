@@ -19,6 +19,7 @@
     <string name="error_wrongAnswer">回答错误</string>
     <string name="error_didAnswer">这个题目你已经回答过了</string>
     <string name="error_didLockUpAnswer">这个题目你看过答案了</string>
+    <string name="error_NotLockUpAnswer">只有查看2次答案的机会哦</string>
 
     <string name="prompt_correctAnswer">回答正确</string>
 </resources>

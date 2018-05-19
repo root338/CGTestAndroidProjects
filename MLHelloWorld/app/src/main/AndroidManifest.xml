@@ -17,7 +17,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MLCheatActivity" />
-        <activity android:name=".MLAnswerMainActivity"></activity>
     </application>
 
 </manifest>

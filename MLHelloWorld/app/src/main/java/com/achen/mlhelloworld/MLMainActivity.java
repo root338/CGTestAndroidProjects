@@ -19,7 +19,11 @@ public class MLMainActivity extends AppCompatActivity {
 
     /// 问题列表
     private MLQuestion[] mQuestionList;
+    /// 当前问题的索引
     private int mCurrentQuestionIndex = 0;
+    /// 查看问题答案的总次数
+    private int mLockUpAnswerTotal = 0;
+
     private TextView mQuestionView;
     private String[] mUserDidAnswer;
     private int[] mUserLockUpAnswer;
@@ -27,8 +31,8 @@ public class MLMainActivity extends AppCompatActivity {
     private final String CURRENT_QUESTION_INDEX_KEY = "CurrentQuestionIndexkey";
     /// 用户回答过的题目索引列表 key
     private final String USER_DID_ANSWER_KEY = "UserDidAnswerKey";
-    /// 用户查看过答案的题目索引列表 key
-    private final String USER_LOCK_UP_ANSWER_KEY = "UserLockUpAnswerKey";
+    /// 存储用户查看答案总次数 key
+    private final String USER_LOCK_UP_ANSWER_TOTAL_KEY = "userLockUpAnswerTotalKey";
     private Toast mToast;
 
     private final int REQUEST_CODE_CHEAT = 1;
@@ -43,6 +47,7 @@ public class MLMainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             mCurrentQuestionIndex = savedInstanceState.getInt(CURRENT_QUESTION_INDEX_KEY);
             readUserDidAnswerList(savedInstanceState.getIntegerArrayList(USER_DID_ANSWER_KEY));
+            mLockUpAnswerTotal = savedInstanceState.getInt(USER_LOCK_UP_ANSWER_TOTAL_KEY);
         }
 
         showQuestion(mCurrentQuestionIndex);
@@ -89,7 +94,14 @@ public class MLMainActivity extends AppCompatActivity {
         mShowAnswerButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent mIntent = MLCheatActivity.newIntent(MLMainActivity.this, getCurrentQuestion().getQuestionResult());
+
+                MLQuestion question = getCurrentQuestion();
+                if (mLockUpAnswerTotal >= 2 && question.mUserDidAnswerStatus == MLQuestionAnswerStatus.NO_ANSWER) {
+                    show(R.string.error_NotLockUpAnswer);
+                    return;
+                }
+
+                Intent mIntent = MLCheatActivity.newIntent(MLMainActivity.this, question.getQuestionResult());
                 startActivityForResult(mIntent, REQUEST_CODE_CHEAT);
             }
         });
@@ -108,6 +120,7 @@ public class MLMainActivity extends AppCompatActivity {
             if (question.mUserDidAnswerStatus == MLQuestionAnswerStatus.NO_ANSWER) {
                 if (MLCheatActivity.wasAnswerShow(data) == true) {
                     question.mUserDidAnswerStatus = MLQuestionAnswerStatus.LOCK_UP_ANSWER;
+                    mLockUpAnswerTotal += 1;
                 }
             }
         }
@@ -260,6 +273,7 @@ public class MLMainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_QUESTION_INDEX_KEY, mCurrentQuestionIndex);
         outState.putIntegerArrayList(USER_DID_ANSWER_KEY, saveUserDidAnswerQuestionList());
+        outState.putInt(USER_LOCK_UP_ANSWER_TOTAL_KEY, mLockUpAnswerTotal);
     }
 
     @Override
