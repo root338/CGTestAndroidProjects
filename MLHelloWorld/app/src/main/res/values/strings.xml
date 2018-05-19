@@ -3,7 +3,9 @@
 
     <string name="true_button">对</string>
     <string name="false_button">错</string>
-    
+    <string name="cheat_button">查看答案</string>
+    <string name="show_answer_button">显示答案</string>
+
     <string name="question_001">地球是圆的</string>
     <string name="question_002">世界上总人口超过70亿了</string>
     <string name="question_003">Android Studio 现在的最新版本是3.0.0</string>
@@ -16,6 +18,6 @@
     <string name="error_previousQuestionIsNull">没有上一个问题了</string>
     <string name="error_wrongAnswer">回答错误</string>
     <string name="error_didAnswer">这个题目你已经回答过了</string>
-    
+
     <string name="prompt_correctAnswer">回答正确</string>
 </resources>

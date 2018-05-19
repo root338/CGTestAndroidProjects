@@ -1,5 +1,6 @@
 package com.achen.mlhelloworld;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class MLMainActivity extends AppCompatActivity {
         Button mFalseButton = findViewById(R.id.false_button);
         ImageButton mNextButton = findViewById(R.id.next_button);
         ImageButton mPreviousButton = findViewById(R.id.previous_button);
+        Button mShowAnswerButton = findViewById(R.id.show_answer_button);
 
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +82,21 @@ public class MLMainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mShowAnswerButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = MLCheatActivity.newIntent(MLMainActivity.this, getCurrentQuestion().getQuestionResult());
+                startActivity(mIntent);
+            }
+        });
     }
 
+    // 获取当前的问题
+    MLQuestion getCurrentQuestion() {
+        return getQuestionList()[mCurrentQuestionIndex];
+    }
+    // 显示下一个问题
     MLQuestionResultType showNextQuestion() {
         int nextQuestionIndex = mCurrentQuestionIndex + 1;
         MLQuestionResultType result = showQuestion(nextQuestionIndex);
@@ -90,7 +105,7 @@ public class MLMainActivity extends AppCompatActivity {
         }
         return result;
     }
-
+    // 显示上一个问题
     MLQuestionResultType showPreviousQuestion() {
         int previousQuestionIndex = mCurrentQuestionIndex - 1;
         MLQuestionResultType resultType = showQuestion(previousQuestionIndex);
@@ -99,7 +114,7 @@ public class MLMainActivity extends AppCompatActivity {
         }
         return resultType;
     }
-
+    // 显示指定索引的问题
     MLQuestionResultType showQuestion(int index) {
 
         MLQuestion[] questionList = getQuestionList();
@@ -124,7 +139,7 @@ public class MLMainActivity extends AppCompatActivity {
         mQuestionView.setText(getQuestionList()[index].getQuestionId());
         return MLQuestionResultType.SUCCESS;
     }
-
+    //获取问题列表
     MLQuestion[] getQuestionList() {
         if (mQuestionList == null) {
             mQuestionList = MLQuestion.createQuestionList();
@@ -132,6 +147,7 @@ public class MLMainActivity extends AppCompatActivity {
         return mQuestionList;
     }
 
+    // 显示提示信息
     void show(int messageId) {
         if (mToast == null) {
             mToast = Toast.makeText(MLMainActivity.this, messageId, Toast.LENGTH_SHORT);
@@ -139,10 +155,11 @@ public class MLMainActivity extends AppCompatActivity {
         }else {
             mToast.setText(messageId);
         }
-        
+
         mToast.show();
     }
 
+    // 处理回答的结果
     void handleResult(Boolean value) {
         MLQuestion currentQuestion = getQuestionList()[mCurrentQuestionIndex];
         if (currentQuestion.mUserDidAnswerStatus != MLQuestionAnswerStatus.NO_ANSWER) {
@@ -158,7 +175,7 @@ public class MLMainActivity extends AppCompatActivity {
             showNextQuestion();
         }
     }
-
+    // 处理回答结果的不同类型值
     void handleError(MLQuestionResultType resultType) {
 
         if (resultType == MLQuestionResultType.SUCCESS) {
@@ -183,11 +200,13 @@ public class MLMainActivity extends AppCompatActivity {
         show(errorId);
     }
 
+    // debug 日志
     void debugLog(String log) {
         String mMainActivityTag = "MLMainActivity";
         Log.d(mMainActivityTag, log);
     }
 
+    // 创建存储的问题列表
     ArrayList<Integer> saveUserDidAnswerQuestionList() {
 
         ArrayList<Integer> answerQuestionList = new ArrayList<Integer>();
@@ -201,6 +220,7 @@ public class MLMainActivity extends AppCompatActivity {
         return answerQuestionList;
     }
 
+    // 读取存储的问题列表
     void readUserDidAnswerList(ArrayList<Integer> userDidAnswer) {
         MLQuestion[] questions = getQuestionList();
         for (int index = 0; index < questions.length; index++) {

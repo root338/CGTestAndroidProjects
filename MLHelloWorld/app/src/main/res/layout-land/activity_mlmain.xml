@@ -49,6 +49,14 @@
             android:layout_gravity="start|left|bottom|end"
             android:src="@drawable/arrow_left" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_answer_button"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="10dp"
+            android:id="@+id/show_answer_button"/>
+
     </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
