@@ -11,11 +11,16 @@ import android.widget.TextView;
 public class MLCheatActivity extends AppCompatActivity {
 
     private final static String ML_CONSANT_ANSWER_VALUE_TAG = "com.achen.mlhellworld.mlcheatActivity";
+    private final static String ML_CONSANT_SHOW_ANSWER_TAG = "com.achen.mlhellworld.mlcheatActivity.show.answer";
 
     public static Intent newIntent(Context context, Boolean answerValue) {
         Intent intent = new Intent(context, MLCheatActivity.class);
         intent.putExtra(ML_CONSANT_ANSWER_VALUE_TAG, answerValue);
         return intent;
+    }
+
+    public static Boolean wasAnswerShow(Intent intent) {
+        return intent.getBooleanExtra(ML_CONSANT_SHOW_ANSWER_TAG, false);
     }
 
     @Override
@@ -36,7 +41,14 @@ public class MLCheatActivity extends AppCompatActivity {
                 }else {
                     mAnswerTextView.setText(R.string.false_button);
                 }
+                setAnswerShowResult(true);
             }
         });
+    }
+
+    private void setAnswerShowResult(boolean isAnswerShow) {
+        Intent intent = new Intent();
+        intent.putExtra(ML_CONSANT_SHOW_ANSWER_TAG, isAnswerShow);
+        setResult(RESULT_OK, intent);
     }
 }

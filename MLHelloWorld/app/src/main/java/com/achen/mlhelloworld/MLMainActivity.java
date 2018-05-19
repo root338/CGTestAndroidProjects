@@ -1,5 +1,6 @@
 package com.achen.mlhelloworld;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ public class MLMainActivity extends AppCompatActivity {
     /// 用户查看过答案的题目索引列表 key
     private final String USER_LOCK_UP_ANSWER_KEY = "UserLockUpAnswerKey";
     private Toast mToast;
+
+    private final int REQUEST_CODE_CHEAT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +90,27 @@ public class MLMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent mIntent = MLCheatActivity.newIntent(MLMainActivity.this, getCurrentQuestion().getQuestionResult());
-                startActivity(mIntent);
+                startActivityForResult(mIntent, REQUEST_CODE_CHEAT);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            if (data == null) { return;}
+
+            MLQuestion question = getCurrentQuestion();
+            if (question.mUserDidAnswerStatus == MLQuestionAnswerStatus.NO_ANSWER) {
+                if (MLCheatActivity.wasAnswerShow(data) == true) {
+                    question.mUserDidAnswerStatus = MLQuestionAnswerStatus.LOCK_UP_ANSWER;
+                }
+            }
+        }
     }
 
     // 获取当前的问题
@@ -162,6 +183,10 @@ public class MLMainActivity extends AppCompatActivity {
     // 处理回答的结果
     void handleResult(Boolean value) {
         MLQuestion currentQuestion = getQuestionList()[mCurrentQuestionIndex];
+        if (currentQuestion.mUserDidAnswerStatus == MLQuestionAnswerStatus.LOCK_UP_ANSWER) {
+            show(R.string.error_didLockUpAnswer);
+            return;
+        }
         if (currentQuestion.mUserDidAnswerStatus != MLQuestionAnswerStatus.NO_ANSWER) {
             show(R.string.error_didAnswer);
             return;
